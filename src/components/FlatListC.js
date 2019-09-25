@@ -3,16 +3,18 @@ import { FlatList, Text, StyleSheet, Alert } from "react-native";
 import { Button, Divider } from "react-native-paper";
 
 export default class FlatListC extends Component {
-  static navigationOptions = {
-    title: "Oh yeah ! Flatlist",
-
-    headerStyle: {
-      backgroundColor: "brown"
-    },
-    headerTitleStyle: {
-      color: "#fff"
-    }
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam("key", "Param value"),
+      // headerStyle: {
+      //   backgroundColor: "brown"
+      // },
+      headerTitleStyle: {
+        color: "#fff"
+      }
+    };
   };
+
   state = {
     data: [
       { key: "Android" },
@@ -23,8 +25,7 @@ export default class FlatListC extends Component {
       { key: "Hadoop" },
       { key: "Sap" },
       { key: "Python" },
-      { key: "Ajax" },
-     
+      { key: "Ajax" }
     ]
   };
   render() {
@@ -33,18 +34,29 @@ export default class FlatListC extends Component {
         <FlatList
           data={this.state.data}
           renderItem={({ item }) => (
-         
-              <Text style={styles.item} onPress={()=>Alert.alert(item.key)}>
-                {item.key}
-              </Text>
-            
+            <Text
+              style={styles.item}
+              onPress={() =>
+                this.props.navigation.navigate("ChatScreen", {
+                  accessMe: item.key,
+                  // data : 'i am data'
+                })
+              }
+            >
+              {item.key}
+            </Text>
           )}
-          ItemSeparatorComponent={()=> <Divider />}  
-
+          ItemSeparatorComponent={() => <Divider />}
         />
-     
+        <Button
+          onPress={() =>
+            this.props.navigation.setParams({ key: "I am updated" })
+          }
+        >
+          Update title by navigation setParam
+        </Button>
 
-         <Button
+        <Button
           style={{
             width: 160,
             height: 40,
